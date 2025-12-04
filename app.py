@@ -1,5 +1,4 @@
 # MTN MoMo Record Keeper - Flask Backend with MySQL
-# Server-side rendering, no JavaScript
 
 from flask import Flask, request, render_template, session, redirect, url_for, send_file
 from datetime import datetime
@@ -336,4 +335,5 @@ if __name__ == '__main__':
     print("Starting MTN MoMo Record Keeper Flask app...")
     print("Open http://127.0.0.1:5000/ in your browser")
     print("MySQL Configuration: host=localhost, user=root, password=root")
+
     app.run(debug=True, host='127.0.0.1', port=5000)
