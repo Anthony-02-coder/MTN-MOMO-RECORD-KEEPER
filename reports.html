@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Reports - MTN MoMo Record Keeper{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <h2>Reports & Analytics</h2>
+    
+    <div class="report-controls">
+        <form method="GET" style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; width:100%;">
+            <label style="flex:1; min-width:140px;">From Date
+                <input type="date" name="from_date" id="from_date" />
+            </label>
+            <label style="flex:1; min-width:140px;">To Date
+                <input type="date" name="to_date" id="to_date" />
+            </label>
+            <label style="flex:1; min-width:140px;">Filter by Agent
+                <select name="agent" id="agent_filter">
+                    <option value="">All Agents</option>
+                    {% for agent in agents %}
+                        <option value="{{ agent }}">{{ agent }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <div style="display:flex; gap:8px;">
+                <button type="submit" class="btn" style="white-space:nowrap;">📊 Generate</button>
+                <a href="{{ url_for('export_csv') }}" class="btn" id="export_btn" style="white-space:nowrap;">📥 Export CSV</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="report-area">
+        <h3>Summary Statistics</h3>
+        <div id="summary-content" style="padding:20px; text-align:center; color:#999;">
+            <p>📈 Select a date range and click "Generate" to view transaction summary</p>
+        </div>
+    </div>
+</div>
+
+<form id="export_form" method="GET" action="{{ url_for('export_csv') }}" style="display:none;">
+    <input type="hidden" name="from_date" id="hidden_from_date" />
+    <input type="hidden" name="to_date" id="hidden_to_date" />
+    <input type="hidden" name="agent" id="hidden_agent" />
+</form>
+
+<script>
+document.getElementById('export_btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('hidden_from_date').value = document.getElementById('from_date').value;
+    document.getElementById('hidden_to_date').value = document.getElementById('to_date').value;
+    document.getElementById('hidden_agent').value = document.getElementById('agent_filter').value;
+    document.getElementById('export_form').submit();
+});
+</script>
+{% endblock %}

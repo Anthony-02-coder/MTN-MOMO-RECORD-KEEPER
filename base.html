@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MTN MoMo Record Keeper{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="app-header">
+        <div style="display: flex; align-items: center;">
+            <span class="logo">M</span>
+            <h1>MTN MoMo Record Keeper</h1>
+        </div>
+        {% if 'username' in session %}
+        <div class="agent-info">
+            <span>{{ session.get('agent_name', session.get('username')) }}</span>
+            <a href="{{ url_for('logout') }}" class="btn small">Logout</a>
+        </div>
+        {% endif %}
+    </header>
+
+    {% if 'username' in session %}
+    <nav class="tabs">
+        <a href="{{ url_for('dashboard') }}" class="tab {% if request.endpoint == 'dashboard' %}active{% endif %}">📋 Records</a>
+        <a href="{{ url_for('add_record') }}" class="tab {% if request.endpoint == 'add_record' %}active{% endif %}">➕ Add Record</a>
+        <a href="{{ url_for('reports') }}" class="tab {% if request.endpoint == 'reports' %}active{% endif %}">📊 Reports</a>
+    </nav>
+    {% endif %}
+
+    <main class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2025 MTN MoMo Record Keeper | South Sudan | Secure Transaction Management</p>
+    </footer>
+</body>
+</html>

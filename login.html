@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Login - MTN MoMo Record Keeper{% endblock %}
+
+{% block content %}
+<div class="panel login-panel" style="text-align: center;">
+    <div style="font-size: 48px; color: #FFCC00; font-weight: 900; margin-bottom: 16px;">M</div>
+    <h2>MTN MoMo</h2>
+    <p style="color: #666; margin-bottom: 24px;">Agent Record Management System</p>
+    
+    {% if error %}
+        <div class="error-message">{{ error }}</div>
+    {% endif %}
+    
+    <form method="POST">
+        <label>Agent Username
+            <input type="text" name="username" required placeholder="Enter your agent ID" />
+        </label>
+        <label>Password
+            <input type="password" name="password" required placeholder="Enter password" />
+        </label>
+        <div class="actions" style="justify-content: center;">
+            <button type="submit" class="btn" style="width: 100%; text-align: center;">Sign In</button>
+        </div>
+    </form>
+    
+    <small style="text-align: center;">
+        <strong>Demo Credentials:</strong><br/>
+        Username: <code>agent1</code> | Password: <code>pass123</code><br/>
+        Username: <code>agent2</code> | Password: <code>pass123</code>
+    </small>
+</div>
+{% endblock %}

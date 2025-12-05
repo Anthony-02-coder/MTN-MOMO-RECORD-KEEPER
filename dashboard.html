@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Records - MTN MoMo Record Keeper{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <h2>Transaction Records</h2>
+    
+    <form method="GET" class="filters">
+        <input type="text" name="search" placeholder="🔍 Search by phone, reference, or agent" value="{{ search }}" />
+        <input type="date" name="from_date" value="{{ from_date }}" title="From Date" />
+        <input type="date" name="to_date" value="{{ to_date }}" title="To Date" />
+        <select name="agent">
+            <option value="">All Agents</option>
+            {% for agent in agents %}
+                <option value="{{ agent }}" {% if agent == agent_filter %}selected{% endif %}>{{ agent }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn small">🔎 Apply Filter</button>
+        <a href="{{ url_for('dashboard') }}" class="btn small secondary">Reset</a>
+    </form>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date & Time</th>
+                    <th>Phone</th>
+                    <th>Type</th>
+                    <th>Amount (SSP)</th>
+                    <th>Agent</th>
+                    <th>Reference</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if records %}
+                    {% for record in records %}
+                    <tr>
+                        <td><strong>#{{ record.id }}</strong></td>
+                        <td>{{ record.date.strftime('%Y-%m-%d %H:%M') if record.date else 'N/A' }}</td>
+                        <td><code>{{ record.phone }}</code></td>
+                        <td>
+                            {% if record.type == 'deposit' %}
+                                💰 Deposit
+                            {% elif record.type == 'withdrawal' %}
+                                🏧 Withdrawal
+                            {% elif record.type == 'reverse' %}
+                                🔄 Reverse
+                            {% else %}
+                                {{ record.type }}
+                            {% endif %}
+                        </td>
+                        <td><strong>{{ '%.2f'|format(record.amount) }}</strong></td>
+                        <td>{{ record.agent }}</td>
+                        <td>{{ record.reference or '—' }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('delete_record', record_id=record.id) }}" style="display:inline;">
+                                <button type="submit" class="action-btn" onclick="return confirm('Delete record #{{ record.id }}?')">🗑️ Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8" style="text-align:center; padding:30px; color: #999;">
+                            📭 No records found. <a href="{{ url_for('add_record') }}">Create one</a>
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Add Record - MTN MoMo Record Keeper{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <h2>Register New Transaction</h2>
+    {% if error %}
+        <div class="error-message">{{ error }}</div>
+    {% endif %}
+    <form method="POST">
+        <div class="row">
+            <label>Customer Phone Number
+                <input type="tel" name="phone" placeholder="07XXXXXXXXX" required pattern="[0-9+]{9,15}" />
+            </label>
+            <label>Transaction Amount (SSP)
+                <input type="number" name="amount" min="0.01" step="0.01" placeholder="0.00" required />
+            </label>
+        </div>
+        <div class="row">
+            <label>Transaction Type
+                <select name="type" required>
+                    <option value="">-- Select Type --</option>
+                    <option value="deposit">💰 Deposit</option>
+                    <option value="withdrawal">🏧 Withdrawal</option>
+                    <option value="reverse">🔄 Reverse</option>
+                </select>
+            </label>
+            <label>Reference/Notes
+                <input type="text" name="reference" placeholder="Optional reference number" />
+            </label>
+        </div>
+        <div class="actions">
+            <button type="submit" class="btn">Save Transaction</button>
+            <a href="{{ url_for('dashboard') }}" class="btn secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
